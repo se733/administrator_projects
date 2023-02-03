@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcryp from "bcrypt";
 
 const UsuarioSchema = mongoose.Schema(
   {
@@ -30,6 +31,13 @@ const UsuarioSchema = mongoose.Schema(
     timestamps: true,
   }
 );
+UsuarioSchema.pre("save", async function (next) {
+  if(!this.isModified("password")){
+    next();
+  }
+  const salt = await bcryp.genSalt(10);
+  this.password = await bcryp.hash(this.password, salt);
+});
 
 const Usuario = mongoose.model("Usuario", UsuarioSchema);
 export default Usuario;
