@@ -1,10 +1,10 @@
 import express from 'express';
 import conectarDB from './config/db.js';
-// import dotenv from "dotenv"
+import dotenv from "dotenv"
 
 const app = express();
+dotenv.config()
 conectarDB()
-// dotenv.config()
 const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
