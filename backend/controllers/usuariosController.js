@@ -21,6 +21,8 @@ const registrar = async (req, res) => {
   }
 };
 
+
+
 const autenticar = async (req, res) => {
   const {email, password} = req.body;
 
@@ -33,6 +35,18 @@ const autenticar = async (req, res) => {
   //comprobar si el usuario está confirmado
   if(!usuario.confirmado) {
     const error = new Error('Tu usuario no ha sido confirmado')
+    return res.status(403).json({msg: error.message})
+  }
+
+  //comprobar su password
+  if(await usuario.comprobarPassword(password)) {
+    res.json({
+      _id: usuario._id,
+      nombre: usuario.nombre,
+      email: usuario.email
+    })
+  } else {
+    const error = new Error('El password es incorrecto')
     return res.status(403).json({msg: error.message})
   }
 }

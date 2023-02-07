@@ -39,5 +39,9 @@ UsuarioSchema.pre("save", async function (next) {
   this.password = await bcryp.hash(this.password, salt);
 });
 
+UsuarioSchema.methods.comprobarPassword = async function(passwordFormulario) {
+  return await bcryp.compare(passwordFormulario, this.password)
+}
+
 const Usuario = mongoose.model("Usuario", UsuarioSchema);
 export default Usuario;
